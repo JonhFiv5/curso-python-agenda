@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block titulo %} Detalhes {% endblock  %}
+
+{% block conteudo %}
+    {% if contato %}
+        <dl>
+            <h1 class="mt-5">{{contato.nome}} {{contato.sobrenome}}</h1>
+
+            <p>
+                {% if contato.foto %}
+                    <img src="{{contato.foto.url}}" alt="Foto do contato" height="200" width="auto">
+                {% else %}
+                    <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png" alt="Foto do contato" height="200" width="auto">
+                {% endif %}
+            </p>
+
+            <dt>Telefone</dt>
+            <dd>{{contato.telefone}}</dd>
+
+            <dt>Email</dt>
+            <dd>{{contato.email}}</dd>
+
+            <dt>Data de Criação</dt>
+            <dd>{{contato.data_criacao}}</dd>
+
+            <dt>Categoria</dt>
+            <dd>{{contato.categoria}}</dd>
+
+            <dt>Descrição</dt>
+            <dd>{{contato.descricao}}</dd>
+        </dl>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nada encontrado.
+        </div>
+    {% endif %}
+
+{% endblock %}

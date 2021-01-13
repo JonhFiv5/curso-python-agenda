@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Contatos{% endblock %}
+
+{% block conteudo %}
+    <h1 class="mt-5">Minha agenda</h1>
+
+    <form class="mt-3 mb-3 form-inline d-flex justify-content-center md-form form-sm active-cyan active-cyan-2 mt-2" action="{% url 'busca' %}" method="get">
+        <input class="form-control form-control-sm ml-3 w-75" type="text" value="{{request.GET.termo}}" aria-label="Buscar" name="termo">
+        <input type="submit" value="Pesquisar">
+    </form>
+
+    {% include 'parciais/_messages.html' %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Sobrenome</th>
+                <th>Telefone</th>
+                <th>Email</th>
+                <th>Categoria</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contato in contatos%}
+                <tr>
+                    <td>{{contato.id}}</td>
+                    <td>
+                        <a href="{% url 'ver_contato' id=contato.id %}">{{contato.nome}}</a>
+                    </td>
+                    <td>{{contato.sobrenome}}</td>
+                    <td>{{contato.telefone}}</td>
+                    <td>{{contato.email}}</td>
+                    <td>{{contato.categoria}}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td>Nenhum contato encontrado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination pagination-sm">
+            {% if contatos.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1&termo={{request.GET.termo}}">&lt;&lt;</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ contatos.previous_page_number }}&termo={{request.GET.termo}}">&lt;</a></li>
+            {% endif %}
+
+            {% for num_pagina in contatos.paginator.page_range %}
+                {% if num_pagina == contatos.number %}
+                    <li class="page-item active">
+                        <a class="page-link" tabindex="-1">{{ num_pagina }} <span class="sr-only">(current)</span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num_pagina }}&termo={{request.GET.termo}}">{{ num_pagina }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if contatos.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ contatos.next_page_number }}&termo={{request.GET.termo}}">&gt;</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ contatos.paginator.num_pages }}&termo={{request.GET.termo}}">&gt;&gt;</a></li>
+            {% endif %}
+        </ul>
+      </nav>
+{% endblock %}
